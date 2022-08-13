@@ -1,5 +1,5 @@
-## linkflow
-存放各种流式处理函数
+## easychan
+使用各种chan操作的函数
 
 ## Tee函数，一拖二(一个chan 生成两个)
 使用者只管往一个chan里面写数据，从easychan里面生成的两个chan可以得到同样的数据
