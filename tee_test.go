@@ -1,4 +1,4 @@
-package linkflow
+package easychan
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 )
 
 func Test_Tee(t *testing.T) {
-	voice := make(chan interface{})
-	out1, out2 := Tee(context.Background(), voice)
+	data := make(chan int)
+	out1, out2 := Tee(context.Background(), data)
 
 	var wg sync.WaitGroup
 
@@ -26,10 +26,10 @@ func Test_Tee(t *testing.T) {
 
 	go func() {
 		for _, v := range need {
-			voice <- v
+			data <- v
 		}
 
-		close(voice)
+		close(data)
 
 	}()
 
@@ -43,7 +43,7 @@ func Test_Tee(t *testing.T) {
 					assert.Equal(t, need, got)
 					return
 				}
-				got = append(got, d.(int))
+				got = append(got, d)
 			}
 		}
 	}()
@@ -58,7 +58,7 @@ func Test_Tee(t *testing.T) {
 					assert.Equal(t, need, got)
 					return
 				}
-				got = append(got, d.(int))
+				got = append(got, d)
 			}
 		}
 	}()

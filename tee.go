@@ -1,11 +1,11 @@
-package linkflow
+package easychan
 
 import "context"
 
 // Tee 函数有点类似
-func Tee(ctx context.Context, in chan interface{}) (out1, out2 chan interface{}) {
-	out1 = make(chan interface{})
-	out2 = make(chan interface{})
+func Tee[T any](ctx context.Context, in chan T) (out1, out2 chan T) {
+	out1 = make(chan T)
+	out2 = make(chan T)
 
 	go func() {
 

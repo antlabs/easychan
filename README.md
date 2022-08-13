@@ -2,18 +2,21 @@
 存放各种流式处理函数
 
 ## Tee函数，一拖二(一个chan 生成两个)
+使用者只管往一个chan里面写数据，从easychan里面生成的两个chan可以得到同样的数据
 伪代码如下
 ```go
- 	voice := make(chan interface{})
-	out1, out2 := linkflow.Tee(context.Background(), voice)
-	var wg sync.WaitGroup
+  // 这里支持任意类型chan
+ 	voice := make(chan []byte)
+  var wg sync.WaitGroup
+	out1, out2 := easychan.Tee(context.Background(), voice)
 
 	wg.Add(2)
 	defer wg.Wait()
 
 	go func() {
+    // 模拟生产者发音频
 		for k := range [100]int{} {
-			voice <- k
+			voice <- []byte{k}
 		}
 
 		close(voice)
@@ -28,7 +31,7 @@
 				if !ok {
 					return
 				}
-				fmt.Printf("out1 :%d\n", d.(int))
+				fmt.Printf("out1 :%d\n", d)
 			}
 		}
 	}()
@@ -41,7 +44,7 @@
 				if !ok {
 					return
 				}
-				fmt.Printf("out2 :%d\n", d.(int))
+				fmt.Printf("out2 :%d\n", d)
 			}
 		}
 	}()
