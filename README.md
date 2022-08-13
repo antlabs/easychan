@@ -1,7 +1,29 @@
 ## easychan
-使用各种chan操作的函数
+各种chan操作的函数, 全部实现为泛型，go >= 1.18
 
-## Tee函数，一拖二(一个chan 生成两个)
+## read
+```go
+// 无阻塞读
+c := make(chan bool)
+v, ok := easychan.AsyncRead(c)
+
+// 阻塞带context读
+ctx, cancel := context.WithCancel(context.TODO())
+easychan.ReadContext(ctx, c)
+```
+
+## write
+```go
+// 无阻塞写
+c := make(chan bool)
+easychan.AsyncWrite(c)
+
+// 阻塞带context读
+ctx, cancel := context.WithCancel(context.TODO())
+
+easychan.WriteContext(ctx, c, true)
+```
+## Tee函数，一拖二(对原chan镜像两份数据流)
 使用者只管往一个chan里面写数据，从easychan里面生成的两个chan可以得到同样的数据
 伪代码如下
 ```go
